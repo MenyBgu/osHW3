@@ -1,10 +1,10 @@
 /*__MenyBuganim_302490610___BaruchRothkoff_311603252*/
 
-public class semaphore {
+public class Semaphore {
     private final int MAX_AVAIL;
     private int availNow;
 
-    public semaphore(int tickets) {
+    public Semaphore(int tickets) {
         availNow = MAX_AVAIL = tickets;
     }
 

@@ -9,6 +9,8 @@ public class main {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        System.setOut(new SyncPrintStream(System.out));
+
         System.out.print("Enter num of wash stations: ");
         var washStations = scanner.nextInt();
         System.out.print("Enter car interval (approximately 1.5): ");
