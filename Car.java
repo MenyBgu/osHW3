@@ -8,9 +8,9 @@ public class Car implements Runnable {
     private CarEndWashListener listener;
     private long startTime;
 
-    public Car(SystemTimer systemTimer, Semaphore semaphore, double secondsToWash, CarEndWashListener listener) {
+    public Car(SystemTimer systemTimer, Semaphore semaphore, double millisecondsToWash, CarEndWashListener listener) {
         this.semaphore = semaphore;
-        this.millisecondsToWash = (int) (secondsToWash * 1000);
+        this.millisecondsToWash = (int) millisecondsToWash;
         this.systemTimer = systemTimer;
         this.listener = listener;
         startTime = System.nanoTime();

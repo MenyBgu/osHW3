@@ -15,6 +15,7 @@ public class main {
     public static void main(String[] args) {
         try {
             System.setOut(new SyncPrintStream(System.out));
+            System.setErr(new SyncPrintStream(System.err));
 
             System.out.print("Enter num of wash stations: ");
             var washStations = scanner.nextInt();
@@ -24,13 +25,13 @@ public class main {
             var carWashInterval = scanner.nextDouble();
             System.out.print("Total runtime (approximately 30): ");
             var totalRuntime = getPoisson(scanner.nextDouble());
+            System.err.println("Possion for runtime is: " + totalRuntime);
 
             var semaphore = new Semaphore(washStations);
             var cars = new ArrayList<Thread>();
             var systemTimer = new SystemTimer();
-            System.out.println(systemTimer.currentSeconds());
             while (systemTimer.currentSeconds() < totalRuntime) {
-                var thread = new Thread(new Car(systemTimer, semaphore, getPoisson(carWashInterval),
+                var thread = new Thread(new Car(systemTimer, semaphore, getPoissonAsMilliseconds(carWashInterval),
                         (t, washTime) -> {
                             synchronized (locker) {
                                 sumOfCars++;
@@ -40,8 +41,11 @@ public class main {
                         }));
                 thread.start();
                 cars.add(thread);
-                Thread.sleep((long) getPoisson(carInterval));
+                Thread.sleep((long) getPoissonAsMilliseconds(carInterval));
             }
+
+            System.err.println("Time Up " + systemTimer.currentSeconds());
+
             while (!cars.isEmpty()) {
                 cars.get(0).join();
             }
@@ -52,7 +56,8 @@ public class main {
         }
     }
 
-    public static double getPoisson(double seconds) {
-        return Math.abs(Math.log(rnd.nextDouble())) * seconds;
+    public static double getPoissonAsMilliseconds(double seconds) {
+        return getPoisson(seconds)  * 1000;
     }
+    public static double getPoisson(double seconds){return Math.abs(Math.log(rnd.nextDouble())) * seconds;}
 }
